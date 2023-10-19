@@ -14,31 +14,28 @@ def start():
     
     file_extension = pathlib.Path(file).suffix
     
-    data = None
+    df = None
     if (file_extension == '.xls' or file_extension == '.xlsx'):
-
-        data = __conver_excel_to_csv(file)
+        df = __conver_excel_to_csv(file)
     elif file_extension == '.csv':
-        data = pandas.read_csv(config.input.path)
-        # data.dropna(inplace=True)
+        df = pandas.read_csv(config.input.path)
     else:
         raise RuntimeError(f"not support {file_extension} file, only support `csv` or `xlsx` file")
-    
-    json = data.to_json()
-    
-    print(json)
+
+    df.dropna(how="all",axis=0,inplace=True)
+    filtered_df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+    json = filtered_df.to_json()
     
     for platrom in config.platforms:
         module = importlib.import_module(platrom.module)
         instance = getattr(module, platrom.plugin)
         if issubclass(instance, ILingoPlugin):
-            instance.load(data)
+            instance.load(json)
 
 def __conver_excel_to_csv(excel):
-   data = pandas.read_excel(excel)
-   data.to_csv(index=False)
-#    data.dropna(inplace=True)
-   return data
+   df = pandas.read_excel(excel)
+   df.to_csv(index=False)
+   return df
     
 
 if __name__ == "__main__":

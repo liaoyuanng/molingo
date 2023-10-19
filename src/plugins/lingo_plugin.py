@@ -2,5 +2,5 @@ from abc import ABC, abstractclassmethod
 
 class ILingoPlugin(ABC):
     @abstractclassmethod
-    def load(csv_data):
+    def load(json):
         print("hi, iOS")

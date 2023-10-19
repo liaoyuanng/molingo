@@ -4,6 +4,6 @@ import pandas
 import json
 
 class LingoIOS(ILingoPlugin):
-    def load(csv_data):
+    def load(json):
         print(f"hi, iOS")
         
