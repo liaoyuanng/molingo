@@ -5,17 +5,11 @@ from config import Platform
 import os
 import utils
 import re
-
+import csv_parser as csv
 
 class LingoIOS(ILingoPlugin):
     
     __platform: Platform
-
-    def __conver_excel_to_csv(excel):
-        df = pandas.read_excel(excel)
-        df.to_csv(index=False)
-        return df
-
 
     def __update_strings_file(self, df, language, filename, dir):
         if not utils.check_is_dir(dir):
@@ -46,30 +40,14 @@ class LingoIOS(ILingoPlugin):
             os.mkdir(lproj_path)
         return lproj_path
 
-    def load(self, file, platform: Platform):
-        # using magic number is better
-        file_extension = pathlib.Path(file).suffix
-        df = None
-        if (file_extension == '.xls' or file_extension == '.xlsx'):
-            df = self.__conver_excel_to_csv(file)
-        elif file_extension == '.csv':
-            df = pandas.read_csv(file)
-        else:
-            raise RuntimeError(f"not support {file_extension} file, only support `csv` or `xlsx` file")
+    def load(self, csv_df, platform: Platform):
         self.__platform = platform
-        
-        # remove all n/a data
-        df.dropna(how="all",axis=0,inplace=True)
-
-        # remove all unnamed columns
-        filtered_df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-        
         # get languages from csv file
-        languages = filtered_df.columns[1:]
+        languages = csv_df.columns[1:]
         for language in languages:
             dir = self.__create_lproj_dir(self, language)
             filename = f'{language}.strings'
-            self.__update_strings_file(self, filtered_df, language, filename, dir)
+            self.__update_strings_file(self, csv_df, language, filename, dir)
         
 
 
