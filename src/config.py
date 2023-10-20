@@ -7,11 +7,12 @@ class Input:
         
 
 class Platform:
-    def __init__(self, platform, module, plugin, output):
+    def __init__(self, platform, module, plugin, output, mode="append", same_key="keep"):
         self.platform = platform
         self.module = module
         self.plugin = plugin
         self.output = output
+        self.mode = mode
 
 class Config:
     def __init__(self, input, platforms: List['Platform']):

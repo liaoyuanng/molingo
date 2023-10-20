@@ -1,5 +1,5 @@
 input:
-  path: /Users/leo/Desktop/Solvely_Locali142.csv
+  path: /Users/leo/Desktop/testcsv.csv
   type: csv
 
 platforms:
@@ -7,6 +7,8 @@ platforms:
     module: plugins.lingo_ios
     plugin: LingoIOS
     output: /Users/leo/Desktop/test
+    mode: append # cover
+    same_key: "keep" # replace
 
   - platform: Flutter
     module: plugins.lingo_flutter

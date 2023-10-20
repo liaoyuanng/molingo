@@ -1,8 +1,6 @@
-import loader as Loader
-import pandas
+import config_loader as Loader
 import importlib
 from plugins.lingo_plugin import ILingoPlugin
-import pathlib
 import os
     
 
@@ -16,7 +14,9 @@ def start():
         module = importlib.import_module(platfrom.module)
         instance = getattr(module, platfrom.plugin)
         if issubclass(instance, ILingoPlugin):
-            instance.load(instance, file=file, platforom=platfrom)
+            instance.load(instance, file=file, platform=platfrom)
+        else:
+            raise RuntimeError(f"{platfrom.plugin} must be a subclass of `ILingoPlugin`")
 
 if __name__ == "__main__":
     start()

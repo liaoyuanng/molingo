@@ -1,7 +1,6 @@
 import yaml
 import json
 from config import *
-from types import SimpleNamespace
 
 def loadYAML():
     with open('./lingo.yml', 'r') as file:
