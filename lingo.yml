@@ -1,12 +1,12 @@
 input:
-  path: /Users/leo/Desktop/未命名.csv
+  path: /Users/leo/Desktop/Solvely_Locali142.csv
   type: csv
 
 platforms:
   - platform: iOS
     module: plugins.lingo_ios
     plugin: LingoIOS
-    output: /to/path/
+    output: /Users/leo/Desktop/test
 
   - platform: Flutter
     module: plugins.lingo_flutter
