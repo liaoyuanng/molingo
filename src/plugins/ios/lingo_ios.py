@@ -1,11 +1,9 @@
 from plugins.lingo_plugin import ILingoPlugin
-import pandas
-import pathlib
 from config import Platform
 import os
 import utils
 import re
-import csv_parser as csv
+
 
 class LingoIOS(ILingoPlugin):
     
@@ -39,15 +37,24 @@ class LingoIOS(ILingoPlugin):
         if not os.path.exists(lproj_path):
             os.mkdir(lproj_path)
         return lproj_path
+    
+    def post_load(self):
+        pass
+        
+    def pre_load(self):
+        swiftgen = "swiftgen"
+        if utils.tool_path(swiftgen) == None:
+            utils.install_with_brew(swiftgen)
 
     def load(self, csv_df, platform: Platform):
+        self.pre_load()
         self.__platform = platform
         # get languages from csv file
         languages = csv_df.columns[1:]
         for language in languages:
-            dir = self.__create_lproj_dir(self, language)
+            dir = self.__create_lproj_dir(language)
             filename = f'{language}.strings'
-            self.__update_strings_file(self, csv_df, language, filename, dir)
+            self.__update_strings_file(csv_df, language, filename, dir)
         
 
 

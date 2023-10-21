@@ -4,13 +4,13 @@ input:
 
 platforms:
   - platform: iOS
-    module: plugins.lingo_ios
+    module: plugins.ios.lingo_ios
     plugin: LingoIOS
     output: /Users/leo/Desktop/test
+    # 'append' or 'cover', default is 'append'
     mode: append # cover
-    same_key: "keep" # replace
 
   - platform: Flutter
-    module: plugins.lingo_flutter
+    module: plugins.flutter.lingo_flutter
     plugin: LingoFlutter
-    output: /to/path/
+    output: /Users/leo/Desktop/flutter_test

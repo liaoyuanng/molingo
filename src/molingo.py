@@ -3,8 +3,8 @@ import importlib
 from plugins.lingo_plugin import ILingoPlugin
 import os
 import csv_parser as csv
+import inspect
     
-
 def start():
     config = Loader.load()
     file = config.input.path
@@ -14,10 +14,10 @@ def start():
     for platfrom in config.platforms:
         module = importlib.import_module(platfrom.module)
         instance = getattr(module, platfrom.plugin)
-        if issubclass(instance, ILingoPlugin):
-            instance.load(instance, csv_df, platfrom)
-        else:
-            raise RuntimeError(f"{platfrom.plugin} must be a subclass of `ILingoPlugin`")
-
+        if not inspect.isabstract(instance):
+            if issubclass(instance, ILingoPlugin):
+                instance.load(instance(), csv_df, platfrom)
+            else:
+                raise RuntimeError(f"{platfrom.plugin} must be a subclass of `ILingoPlugin`")
 if __name__ == "__main__":
     start()
