@@ -1,8 +1,8 @@
 from typing import List
 class Input:
-    def __init__(self, path, type):
+    def __init__(self, path):
         self.path = path
-        self.type = type
+        
 class Platform:
     def __init__(self, platform, module, plugin, proj_root_path, mode="append", same_key="keep", pre_load="", post_load=""):
         self.platform = platform

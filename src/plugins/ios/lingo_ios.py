@@ -10,6 +10,7 @@ class LingoIOS(ILingoPlugin):
     
     __platform: Platform
     __main_language = ""
+    __project_dir = None
 
     def __update_strings_file(self, df, language, filename, dir):
         if not utils.check_is_dir(dir):
@@ -31,10 +32,23 @@ class LingoIOS(ILingoPlugin):
                 file.write(f'"{row["key"]}" = "{value}";\n\n')
                 
     def __create_lproj_dir(self, language):
-        output = os.path.join(self.__platform.proj_root_path, "Resources", "Localization")
-        # create if not exist.
+        files = os.listdir(self.__platform.proj_root_path)
+        for file in files:
+            if file.endswith(".xcodeproj"):
+                self.__project_dir = os.path.join(self.__platform.proj_root_path, file) .split(".")[0]
+        if self.__project_dir == None:
+            utils.log_err("Please provide the directory where the .xcodeproj file is located.")
+            exit()
+                
+        output = os.path.join(self.__project_dir, "Resources", "Localization")
+        # create output dir if not exist.
         if not os.path.exists(output):
             os.makedirs(output, exist_ok=True)
+            
+        generated_output = os.path.join(self.__project_dir, "Resources", "Generated")
+         # create generated dir if not exist.
+        if not os.path.exists(generated_output):
+            os.makedirs(generated_output, exist_ok=True)
         
         # exit if output path is not a dir.
         if not utils.check_is_dir(output):
@@ -48,10 +62,10 @@ class LingoIOS(ILingoPlugin):
         return lproj_path
     
     def post_load(self):
-        utils.log("Exec swiftgen...")
-        yml_path = os.path.join(self.__platform.proj_root_path, 'swiftgen.yml')
+        utils.log("Executing swiftgen...")
+        yml_path = os.path.join(self.__project_dir, 'swiftgen.yml')
         if not utils.check_is_file(yml_path):
-            utils.run(['swiftgen', 'config', 'init'], cwd=self.__platform.proj_root_path)
+            utils.run(['swiftgen', 'config', 'init'], cwd=self.__project_dir)
             with open(yml_path, 'a') as file:
                 config = textwrap.dedent(f"""
                             strings:
@@ -61,7 +75,7 @@ class LingoIOS(ILingoPlugin):
                                     output: ./Resources/Generated/Strings.swift
                             """)
                 file.write(config)
-        utils.run(["swiftgen"], cwd=self.__platform.proj_root_path)
+        utils.run(["swiftgen"], cwd=self.__project_dir)
         
         
     def pre_load(self):

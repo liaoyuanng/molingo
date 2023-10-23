@@ -52,7 +52,7 @@ class LingoFlutter(ILingoPlugin):
     
     
     def post_load(self):
-        utils.log("Exec get-cli")
+        utils.log("Executing get-cli")
         pubspec_path = self.__get_pub_spec_dir()
         utils.run(["get", "generate", "locales"], cwd=pubspec_path)
         
