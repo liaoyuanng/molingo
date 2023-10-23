@@ -6,11 +6,11 @@ platforms:
   - platform: iOS
     module: plugins.ios.lingo_ios
     plugin: LingoIOS
-    output: /Users/leo/Desktop/test
+    proj_root_path: /Users/leo/Documents/workspace/SolveNowClient/MathSolveNow
     # 'append' or 'cover', default is 'append'
     mode: append # cover
 
   - platform: Flutter
     module: plugins.flutter.lingo_flutter
     plugin: LingoFlutter
-    output: /Users/leo/Desktop/flutter_test
+    proj_root_path: /Users/leo/Documents/workspace/flutter_solvely_widget
