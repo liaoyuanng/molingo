@@ -1,22 +1,24 @@
+#!/usr/bin/env python3
+
 import config_loader as Loader
-import importlib
+from importlib import import_module
 from plugins.lingo_plugin import ILingoPlugin
-import os
+from os.path import isfile
 import csv_parser as csv
-import inspect
+from inspect import isabstract
 import utils
     
 def start():
     config = Loader.load()
     file = config.input.path
-    if not os.path.isfile(file):
+    if not isfile(file):
         utils.log_err(f"\"{file}\" does not exist or is not a file")
         exit(0)
     csv_df = csv.parse(file)
     for platfrom in config.platforms:
-        module = importlib.import_module(platfrom.module)
+        module = import_module(platfrom.module)
         instance = getattr(module, platfrom.plugin)
-        if not inspect.isabstract(instance):
+        if not isabstract(instance):
             if issubclass(instance, ILingoPlugin):
                 utils.log_succ(f">>>>>>>>> {platfrom.platform} Localization Start")
                 instance.load(instance(), csv_df, platfrom)

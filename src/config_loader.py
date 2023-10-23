@@ -1,13 +1,18 @@
+import os
+import sys
 import yaml
 import json
 from config import *
 import utils
 
 def loadYAML():
-    if not utils.check_is_file("./lingo.yml"):
+    script_path = os.path.realpath(sys.argv[0])
+    script_dir = os.path.dirname(script_path)
+    yaml_path = os.path.join(os.path.dirname(script_dir), './lingo.yml')
+    if not utils.check_is_file(yaml_path):
         utils.log_err("lingo.yml file does not exist")
         exit()
-    with open('./lingo.yml', 'r') as file:
+    with open(yaml_path, 'r') as file:
         try:
             content = yaml.safe_load(file)
             return content
