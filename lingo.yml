@@ -5,6 +5,7 @@ platforms:
   - platform: iOS
     module: plugins.ios.lingo_ios
     plugin: LingoIOS
+    # the directory where the .xcodeproj file is located.
     proj_root_path: /path/to/ios/project/path
     # 'append' or 'cover', default is 'append'
     mode: append # cover
@@ -12,4 +13,5 @@ platforms:
   - platform: Flutter
     module: plugins.flutter.lingo_flutter
     plugin: LingoFlutter
+    # the directory where the .xcodeproj file is located.
     proj_root_path: /path/to/flutter/project/path
