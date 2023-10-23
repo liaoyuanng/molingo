@@ -24,7 +24,6 @@ class LingoFlutter(ILingoPlugin):
                     data = {}
         
         with open(path, 'w') as file:
-            file.write(utils.do_not_edit_tips())
             for index, row in df.iterrows():
                 data[row["key"]] = row[language]
             json.dump(data, file, indent=4, ensure_ascii=False)
