@@ -1,16 +1,15 @@
 input:
-  path: /Users/leo/Desktop/testcsv.csv
-  type: csv
+  path: /path/to/csv
 
 platforms:
   - platform: iOS
     module: plugins.ios.lingo_ios
     plugin: LingoIOS
-    proj_root_path: /Users/leo/Documents/workspace/SolveNowClient/MathSolveNow
+    proj_root_path: /path/to/ios/project/path
     # 'append' or 'cover', default is 'append'
     mode: append # cover
 
   - platform: Flutter
     module: plugins.flutter.lingo_flutter
     plugin: LingoFlutter
-    proj_root_path: /Users/leo/Documents/workspace/flutter_solvely_widget
+    proj_root_path: /path/to/flutter/project/path
