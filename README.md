@@ -22,6 +22,7 @@ just run
 ```shell
 sh uninstall.sh
 ```
+and remove molingo project.
 
 # Requirements
 
