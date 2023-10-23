@@ -4,11 +4,11 @@ class Input:
         self.path = path
         self.type = type
 class Platform:
-    def __init__(self, platform, module, plugin, output, mode="append", same_key="keep", pre_load="", post_load=""):
+    def __init__(self, platform, module, plugin, proj_root_path, mode="append", same_key="keep", pre_load="", post_load=""):
         self.platform = platform
         self.module = module
         self.plugin = plugin
-        self.output = output
+        self.proj_root_path = proj_root_path
         self.mode = mode
         self.pre_load = pre_load
         self.post_load = post_load

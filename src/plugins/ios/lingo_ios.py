@@ -13,7 +13,8 @@ class LingoIOS(ILingoPlugin):
 
     def __update_strings_file(self, df, language, filename, dir):
         if not utils.check_is_dir(dir):
-            raise RuntimeError(f"target save path: \"{dir}\" must be a directory")
+            utils.log_err(f"target save path: \"{dir}\" must be a directory")
+            exit()
         
         write_mode = 'a' if self.__platform.mode == 'append' else 'w'
         
@@ -30,37 +31,44 @@ class LingoIOS(ILingoPlugin):
                 file.write(f'"{row["key"]}" = "{value}";\n\n')
                 
     def __create_lproj_dir(self, language):
-        output = self.__platform.output
+        output = os.path.join(self.__platform.proj_root_path, "Resources", "Localization")
+        # create if not exist.
         if not os.path.exists(output):
-            os.mkdir(output)
+            os.makedirs(output, exist_ok=True)
+        
+        # exit if output path is not a dir.
         if not utils.check_is_dir(output):
-            raise RuntimeError(f"{output} must be a dir")
+            utils.log_err(f"{output} must be a dir")
+            exit()
+        
+        # create lproj dir if not exist.
         lproj_path = os.path.join(output, f"{language}.lproj")
         if not os.path.exists(lproj_path):
             os.mkdir(lproj_path)
         return lproj_path
     
     def post_load(self):
-        yml_path = os.path.join(self.__platform.output, 'swiftgen.yml')
+        utils.log("Exec swiftgen...")
+        yml_path = os.path.join(self.__platform.proj_root_path, 'swiftgen.yml')
         if not utils.check_is_file(yml_path):
-            utils.run(['swiftgen', 'config', 'init'], cwd=self.__platform.output)
+            utils.run(['swiftgen', 'config', 'init'], cwd=self.__platform.proj_root_path)
             with open(yml_path, 'a') as file:
                 config = textwrap.dedent(f"""
                             strings:
-                                inputs: {self.__main_language}.lproj
+                                inputs: ./Resources/Localization/{self.__main_language}.lproj
                                 outputs:
                                     templateName: structured-swift5
-                                    output: ../Generated/Strings.swift
+                                    output: ./Resources/Generated/Strings.swift
                             """)
                 file.write(config)
-        utils.run(["swiftgen"], cwd=self.__platform.output)
+        utils.run(["swiftgen"], cwd=self.__platform.proj_root_path)
         
         
     def pre_load(self):
-        print("check dependencies...")
+        utils.log("Check dependencies...")
         swiftgen = "swiftgen"
         if utils.get_command_path(swiftgen) == None:
-            print("install swiftgen...")
+            utils.log("Installing Swiftgen...")
             utils.install_with_brew(swiftgen)
             
 
@@ -69,12 +77,13 @@ class LingoIOS(ILingoPlugin):
         self.__platform = platform
         # get languages from csv file
         languages = csv_df.columns[1:]
+        utils.log(f"Initiating localization.")
         for index, language in enumerate(languages):
             dir = self.__create_lproj_dir(language)
             if index == 0:
                 self.__main_language = language
-                
             filename = f'Localizable.strings'
+            utils.log(f"[{language}] localization done.")
             self.__update_strings_file(csv_df, language, filename, dir)
         self.post_load()
         

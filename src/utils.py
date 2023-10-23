@@ -24,11 +24,20 @@ def install_with_brew(name):
     path = get_command_path("brew")
     run([path, "install", name])
         
-def run(command, cwd):
+def run(command, cwd=None):
     try:
         result = subprocess.run(command, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print(result.stdout.decode())
+        log(result.stdout.decode())
         if result.stderr:
-            print(result.stderr.decode())
+            log_err(result.stderr.decode())
     except Exception as e:
-        print(f"An error occurred while running the brew command: {e}")
+        log_err(f"An error occurred while running the brew command: {e}")
+
+def log(msg):
+    print(msg)
+
+def log_succ(msg):
+    print(f"\033[32m{msg}\033[0m")
+
+def log_err(msg):
+    print(f"\033[31m{msg}\033[0m")

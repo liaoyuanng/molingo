@@ -1,3 +1,4 @@
+import utils
 import pathlib
 import pandas
 
@@ -10,7 +11,9 @@ def parse(file):
     elif file_extension == '.csv':
         df = pandas.read_csv(file)
     else:
-        raise RuntimeError(f"not support {file_extension} file, only support `csv` or `xlsx` file")
+        err_msg = f"not support {file_extension} file, only support `csv` or `xlsx` file"
+        utils.log_err(err_msg)
+        exit(0)
     
     # remove all n/a data
     df.dropna(how="all",axis=0,inplace=True)
