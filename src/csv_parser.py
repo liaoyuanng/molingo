@@ -20,6 +20,7 @@ def parse(file):
 
     # remove all unnamed columns
     filtered_df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+    filtered_df = filtered_df[filtered_df[filtered_df.columns].notnull().all(1)]
     return filtered_df
 
 def conver_excel_to_csv(excel):
