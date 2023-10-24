@@ -13,5 +13,5 @@ platforms:
   - platform: Flutter
     module: plugins.flutter.lingo_flutter
     plugin: LingoFlutter
-    # the directory where the .xcodeproj file is located.
+    # the directory where the flutter project is located.
     proj_root_path: /path/to/flutter/project/path
