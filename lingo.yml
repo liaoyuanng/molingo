@@ -1,6 +1,10 @@
 input:
   path: /path/to/csv
 
+# Optional, the main language is the first language in the input file by default.
+languages:
+  main: 'en'
+
 platforms:
   - platform: iOS
     module: plugins.ios.lingo_ios

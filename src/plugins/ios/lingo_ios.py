@@ -29,7 +29,8 @@ class LingoIOS(ILingoPlugin):
                     value = row[language]
                 else:
                     value = row[language].replace('"', '\\"')
-                file.write(f'"{row["key"]}" = "{value}";\n\n')
+                value = value.replace('\n', '\\n')
+                file.write(f'"{row["key"]}" = "{value}";\n')
                 
     def __create_lproj_dir(self, language):
         files = os.listdir(self.__platform.proj_root_path)

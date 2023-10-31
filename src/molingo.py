@@ -14,7 +14,7 @@ def start():
     if not isfile(file):
         utils.log_err(f"\"{file}\" does not exist or is not a file")
         exit(0)
-    csv_df = csv.parse(file)
+    csv_df = csv.parse(file, config)
     for platfrom in config.platforms:
         module = import_module(platfrom.module)
         instance = getattr(module, platfrom.plugin)
